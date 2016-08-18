@@ -210,3 +210,5 @@ def main(stdscr):
 
 curses.wrapper(main)
 ```
+
+![image](https://github.com/LockLight/2048byPython/blob/master/Image/2048.png)
