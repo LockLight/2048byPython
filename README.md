@@ -18,19 +18,19 @@ from collections import defaultdict
 -------------------------
 ###用户行为
 所有的有效输入都可以转换为"上，下，左，右，游戏重置，退出"这六种行为，用 **actions** 表示
->```
+>```python
 actions = ['Up', 'Left', 'Down', 'Right', 'Restart', 'Exit']
 >```
 
 有效输入键是最常见的 W（上），A（左），S（下），D（右），R（重置），Q（退出），这里要考虑到大写键开启的情况，获得有效键值列表：
 
->```
+>```python
 letter_codes = [ord(ch) for ch in 'WASDRQwasdrq']
 >```
 
 将输入与行为进行关联：
 
->```
+>```python
 actions_dict = dict(zip(letter_codes, actions * 2))
 >```
 
@@ -60,7 +60,7 @@ actions_dict = dict(zip(letter_codes, actions * 2))
 状态机会不断循环，直到达到 Exit 终结状态结束程序。
 
 下面是经过提取的主逻辑的代码，会在后面进行补全：
-```
+```python
 def main(stdscr):
 
     def init():
@@ -106,7 +106,7 @@ def main(stdscr):
 ##用户输入处理
 -------------------------------
 阻塞＋循环，直到获得用户有效输入才返回对应行为：
->```
+>```python
  def get_user_action(keyboard):    
     char = "N"
     while char not in actions_dict:    
@@ -118,14 +118,14 @@ def main(stdscr):
 加入这两个操作可以大大节省我们的代码量，减少重复劳动，看到后面就知道了。
 
 矩阵转置：
->```
+>```python
 >def transpose(field):
     return [list(row) for row in zip(*field)]
 >```
 
 矩阵逆转（不是逆矩阵）：
 
->```
+>```python
 def invert(field):
     return [row[::-1] for row in field]
 >```
@@ -133,7 +133,7 @@ def invert(field):
 ##创建棋盘
 ----------------------------------------
 初始化棋盘的参数，可以指定棋盘的高和宽以及游戏胜利条件，默认是最经典的 4x4～2048。
->```
+>```python
 >class GameField(object):
 def __init__(self, height=4, width=4, win=2048):
     self.height = height       #高
@@ -147,7 +147,7 @@ def __init__(self, height=4, width=4, win=2048):
 
 ##棋盘操作
 ###随机生成一个 2 或者 4
->```
+>```python
 >def spawn(self):
         new_element = 4 if randrange(100) > 89 else 2
         (i,j) = choice([(i,j) for i in range(self.width) for j in range(self.height) if self.field[i][j] == 0])
@@ -155,7 +155,7 @@ def __init__(self, height=4, width=4, win=2048):
 >```
 
 ###重置棋盘
->```
+>```python
 >def reset(self):
     if self.score > self.highscore:
         self.highscore = self.score
@@ -167,7 +167,7 @@ def __init__(self, height=4, width=4, win=2048):
 
 ###一行向左合并
 (注：这一操作是在 move 内定义的，拆出来是为了方便阅读)
-```
+```python
 def move_row_left(row):
     def tighten(row): # 把零散的非零单元挤到一块
         new_row = [i for i in row if i != 0]
@@ -196,7 +196,7 @@ def move_row_left(row):
 
 ###棋盘走一步
 通过对矩阵进行转置与逆转，可以直接从左移得到其余三个方向的移动操作
-```
+```python
 def move(self, direction):
     def move_row_left(row):
         #一行向左合并
@@ -217,7 +217,7 @@ def move(self, direction):
 ```
 
 ###判断输赢
-```
+```python
 def is_win(self):
     return any(any(i >= self.win_value for i in row) for row in self.field)
 
@@ -226,7 +226,7 @@ def is_gameover(self):
 ```
 
 ###判断能否移动
-```
+```python
 def move_is_possible(self, direction):
     def row_is_left_movable(row): 
         def change(i):
@@ -255,7 +255,7 @@ def move_is_possible(self, direction):
 ##绘制游戏界面
 （注：这一步是在棋盘类内定义的）
 
-```
+```python
 def draw(self, screen):
     help_string1 = '(W)Up (S)Down (A)Left (D)Right'
     help_string2 = '     (R)Restart (Q)Exit'
@@ -300,7 +300,7 @@ def draw(self, screen):
 
 ##完成主逻辑
 完成以上工作后，我们就可以补完主逻辑了！
-```
+```python
 def main(stdscr):
     def init():
         #重置游戏棋盘
@@ -355,7 +355,7 @@ def main(stdscr):
 ##运行
 ----------------------------------------------
 填上最后一行代码：
-```
+```python
 curses.wrapper(main)
 ```
 运行看看吧！
