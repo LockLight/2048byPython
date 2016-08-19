@@ -8,7 +8,7 @@
 ##curses库导入
 首先创建游戏文件 **2048.py**
 导入需要的包
->```
+>```python
 import curses
 from random import randrange, choice
 from collections import defaultdict
